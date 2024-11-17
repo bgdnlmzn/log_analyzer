@@ -48,7 +48,7 @@ public class LogStatisticsCollectorTest {
         when(thirdLogEntry.status()).thenReturn(200);
 
         when(firstLogEntry.bodyBytesSent()).thenReturn(512L);
-        when(secondLogEntry.bodyBytesSent()).thenReturn(1024L);
+        when(secondLogEntry.bodyBytesSent()).thenReturn(972L);
         when(thirdLogEntry.bodyBytesSent()).thenReturn(256L);
 
         List<String> fileNames = List.of("test1.log", "test2.log");
@@ -58,8 +58,8 @@ public class LogStatisticsCollectorTest {
         assertThat(collector.getUniqueIpCount()).isEqualTo(2);
         assertThat(collector.getFileNames()).isEqualTo("test1.log, test2.log");
         assertThat(collector.totalRequests()).isEqualTo(3);
-        assertThat(collector.averageResponseSize()).isEqualTo(597);
-        assertThat(collector.percentile95ResponseSize()).isEqualTo(1024);
+        assertThat(collector.averageResponseSize()).isEqualTo(580);
+        assertThat(collector.percentile95ResponseSize()).isEqualTo(926);
     }
 
     @Test
