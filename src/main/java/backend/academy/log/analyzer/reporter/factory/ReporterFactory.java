@@ -1,8 +1,7 @@
 package backend.academy.log.analyzer.reporter.factory;
 
+import backend.academy.log.analyzer.reporter.ReportFormat;
 import backend.academy.log.analyzer.reporter.Reporter;
-import backend.academy.log.analyzer.reporter.impl.ADocReporter;
-import backend.academy.log.analyzer.reporter.impl.MarkdownReporter;
 import backend.academy.log.analyzer.statistics.LogStatisticsCollector;
 
 /**
@@ -18,8 +17,7 @@ public class ReporterFactory {
      * @return созданный репортер, который форматирует отчет в указанном формате
      */
     public Reporter createReporter(LogStatisticsCollector statistics, String format) {
-        return "adoc".equalsIgnoreCase(format)
-            ? new ADocReporter(statistics)
-            : new MarkdownReporter(statistics);
+        ReportFormat reportFormat = ReportFormat.fromString(format);
+        return reportFormat.createReporter(statistics);
     }
 }

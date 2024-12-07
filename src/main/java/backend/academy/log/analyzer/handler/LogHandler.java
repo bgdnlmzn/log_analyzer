@@ -81,20 +81,21 @@ public class LogHandler {
      */
     private void processLogs(CliArguments cliArgs) throws IOException, DateTimeParseException {
         LogReader logReader = logReaderFactory.create(cliArgs.path());
-        Stream<String> logLines = logReader.readLogs(cliArgs.path());
 
-        LocalDate fromDate = parseDate(cliArgs.from());
-        LocalDate toDate = parseDate(cliArgs.to());
+        try (Stream<String> logLines = logReader.readLogs(cliArgs.path())) {
+            LocalDate fromDate = parseDate(cliArgs.from());
+            LocalDate toDate = parseDate(cliArgs.to());
 
-        Stream<LogEntry> entries = filterAndParseEntries(
-            logLines,
-            fromDate,
-            toDate,
-            cliArgs.filterField(),
-            cliArgs.filterValue()
-        );
+            Stream<LogEntry> entries = prepareLogEntries(
+                logLines,
+                fromDate,
+                toDate,
+                cliArgs.filterField(),
+                cliArgs.filterValue()
+            );
 
-        generateReport(entries, logReader.getFileNames(), cliArgs);
+            generateReport(entries, logReader.getFileNames(), cliArgs);
+        }
     }
 
     /**
@@ -117,7 +118,7 @@ public class LogHandler {
      * @param filterValue значение для фильтрации
      * @return поток объектов LogEntry
      */
-    private Stream<LogEntry> filterAndParseEntries(
+    private Stream<LogEntry> prepareLogEntries(
         Stream<String> logLines,
         LocalDate from,
         LocalDate to,
